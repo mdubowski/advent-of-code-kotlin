@@ -16,38 +16,34 @@ fun main() {
 }
 
 class Day02(input: List<String>) {
-
     private val reports = input.map { it.split(" ").map { it.toLong() } }
 
-    fun part1(): Int = reports.count { report ->
-        val levelChanges = report.levelChanges
-        val levelChangesAreSafe = levelChanges.all { abs(it) in 1..3 }
-
-        levelChangesAreSafe && (levelChanges.allPositive || levelChanges.allNegative)
-    }
+    fun part1(): Int = reports.count { it.isSafe() }
 
     fun part2(): Int = reports.count { it.isSafeWithDampener() }
+
+    private fun List<Long>.isSafe(): Boolean {
+        val levelChanges = getLevelChanges()
+        val levelChangesAreSafe = levelChanges.all { abs(it) in 1..3 }
+        return levelChangesAreSafe && (levelChanges.allPositive || levelChanges.allNegative)
+    }
+
+    private fun List<Long>.getLevelChanges() = windowed(2).map { it[1] - it[0] }
 
     private fun List<Long>.isSafeWithDampener(): Boolean {
         tailrec fun List<Long>.isSafeWithDampenerRec(ignoreIndex: Int? = null): Boolean {
             val reportToCheck = ignoreIndex?.let { getWithoutElement(ignoreIndex) } ?: this
+            if (reportToCheck.isSafe()) return true
 
-            val levelChanges = reportToCheck.levelChanges
-            val levelChangesAreSafe = levelChanges.all { abs(it) in 1..3 }
-
-            return when {
-                levelChangesAreSafe && (levelChanges.allPositive || levelChanges.allNegative) -> true
-                ignoreIndex == null -> isSafeWithDampenerRec(0)
-                ignoreIndex == size -> false
+            return when (ignoreIndex) {
+                null -> isSafeWithDampenerRec(0)
+                size -> false
                 else -> isSafeWithDampenerRec(ignoreIndex + 1)
             }
         }
 
         return isSafeWithDampenerRec()
     }
-
-    private val List<Long>.levelChanges
-        get() = windowed(2).map { it[1] - it[0] }
 
     private val List<Long>.allPositive: Boolean
         get() = all { it > 0 }
