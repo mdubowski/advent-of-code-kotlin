@@ -13,20 +13,19 @@ fun main() {
 }
 
 class Day03(private val input: List<String>) {
-    fun part1(): Int = """mul\([0-9]{1,3},[0-9]{1,3}\)""".toRegex()
+    fun part1(): Int = """mul\((\d{1,3}),(\d{1,3})\)""".toRegex()
         .findAll(input.joinToString())
-        .map { it.value.toMulInstruction() }
+        .map { it.groupValues.toMulInstruction() }
         .let { execute(it.toList()) }
 
-    fun part2(): Int = """mul\([0-9]{1,3},[0-9]{1,3}\)|do\(\)|don't\(\)""".toRegex()
+    fun part2(): Int = """mul\((\d{1,3}),(\d{1,3})\)|do\(\)|don't\(\)""".toRegex()
         .findAll(input.joinToString())
-        .map { it.value.toInstruction() }
+        .map { it.groupValues.toInstruction() }
         .let { execute(it.toList()) }
 
-    private fun String.toMulInstruction(): Instruction.Mul =
-        removePrefix("mul(").removeSuffix(")").split(",").let { Instruction.Mul(it[0].toInt(), it[1].toInt()) }
+    private fun List<String>.toMulInstruction() = Instruction.Mul(get(1).toInt(), get(2).toInt())
 
-    private fun String.toInstruction(): Instruction = when (this) {
+    private fun List<String>.toInstruction(): Instruction = when (first())  {
         "do()" -> Instruction.Do
         "don't()" -> Instruction.Dont
         else -> toMulInstruction()
