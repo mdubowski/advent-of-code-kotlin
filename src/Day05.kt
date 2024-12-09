@@ -1,3 +1,5 @@
+import kotlin.collections.Map
+
 fun main() {
     fun part1(input: List<String>): Int {
         return Day05(input).part1()

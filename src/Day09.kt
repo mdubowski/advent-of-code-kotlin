@@ -49,13 +49,10 @@ class Day09(private val input: List<String>) {
             }
 
             val firstEmptySpaceIndex = disk.indexOfFirst { it == DiskBlock.FreeSpace }
-            val (firstPart, secondPart) = disk.subList(0, firstEmptySpaceIndex) to disk.subList(
-                firstEmptySpaceIndex + 1,
-                disk.size
-            )
-            val newDisk = firstPart + last + secondPart.dropLast(1)
+            val firstPart = disk.subList(0, firstEmptySpaceIndex)
+            val secondPart = disk.subList(firstEmptySpaceIndex + 1, disk.size)
 
-            return processRec(newDisk)
+            return processRec(firstPart + last + secondPart.dropLast(1))
         }
 
         return processRec(disk)
