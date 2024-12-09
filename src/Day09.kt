@@ -38,27 +38,27 @@ class Day09(private val input: List<String>) {
         }
     }.sum()
 
-    private fun process(str: List<DiskBlock>): List<DiskBlock> {
-        tailrec fun processRec(str: List<DiskBlock>): List<DiskBlock> {
-            if (!str.contains(DiskBlock.FreeSpace)) {
-                return str
+    private fun process(disk: List<DiskBlock>): List<DiskBlock> {
+        tailrec fun processRec(disk: List<DiskBlock>): List<DiskBlock> {
+            if (!disk.contains(DiskBlock.FreeSpace)) {
+                return disk
             }
-            val last = str.last()
+            val last = disk.last()
             if (last == DiskBlock.FreeSpace) {
-                return processRec(str.dropLast(1))
+                return processRec(disk.dropLast(1))
             }
 
-            val firstEmptySpaceIndex = str.indexOfFirst { it == DiskBlock.FreeSpace }
-            val (firstPart, secondPart) = str.subList(0, firstEmptySpaceIndex) to str.subList(
+            val firstEmptySpaceIndex = disk.indexOfFirst { it == DiskBlock.FreeSpace }
+            val (firstPart, secondPart) = disk.subList(0, firstEmptySpaceIndex) to disk.subList(
                 firstEmptySpaceIndex + 1,
-                str.size
+                disk.size
             )
             val newDisk = firstPart + last + secondPart.dropLast(1)
 
             return processRec(newDisk)
         }
 
-        return processRec(str)
+        return processRec(disk)
     }
 
     fun part2(): Int {
