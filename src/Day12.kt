@@ -1,24 +1,23 @@
 import kotlin.collections.Map
 import kotlin.math.abs
 
-fun main() {
-    Day<List<PlantArea>>(day = 12)(
-        inputPreparer = { lines ->
-            buildMap {
-                lines.mapIndexed { y, yLine ->
-                    yLine.mapIndexed { x, plant ->
-                        set(Coordinate(x, y), Plant(plant))
-                    }
+fun main() = day {
+    day = 12
+    inputPreparer { lines ->
+        buildMap {
+            lines.mapIndexed { y, yLine ->
+                yLine.mapIndexed { x, plant ->
+                    set(Coordinate(x, y), Plant(plant))
                 }
-            }.let { findPlantAreas(it) }
-        },
-        firstPart = { areas ->
-            areas.sumOf { it.fencingCostByPerimeter() }.toString()
-        },
-        secondPart = { areas ->
-            areas.sumOf { it.fencingCostBySides() }.toString()
-        }
-    )
+            }
+        }.let { findPlantAreas(it) }
+    }
+    firstPart { areas ->
+        areas.sumOf { it.fencingCostByPerimeter() }.toString()
+    }
+    secondPart { areas ->
+        areas.sumOf { it.fencingCostBySides() }.toString()
+    }
 }
 
 @JvmInline
