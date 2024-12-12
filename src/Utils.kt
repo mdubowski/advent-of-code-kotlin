@@ -19,3 +19,13 @@ fun String.md5() = BigInteger(1, MessageDigest.getInstance("MD5").digest(toByteA
  * The cleaner shorthand for printing output.
  */
 fun Any?.println() = println(this)
+
+fun Coordinate.getPositionsAround(): List<Coordinate> {
+    val (x, y) = this
+    return listOf(
+        Coordinate(x, y - 1),
+        Coordinate(x + 1, y),
+        Coordinate(x, y + 1),
+        Coordinate(x - 1, y),
+    )
+}
